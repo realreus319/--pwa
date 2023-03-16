@@ -1,0 +1,17 @@
+{
+    "lang": "en-us",
+    "name": "潮汐智慧屏",
+    "short_name": "潮汐智慧屏",
+    "description": "潮汐智慧屏节目展示",
+    "start_url": "/",
+    "background_color": "#2f3d58",
+    "theme_color": "#2f3d58",
+    "orientation": "any",
+    "display": "standalone",
+    "icons": [
+        {
+            "src": "/icon512.png",
+            "sizes": "512x512"
+        }
+    ]
+}
