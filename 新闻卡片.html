@@ -41,6 +41,7 @@
   <div class="card">
     <img class="image" src="" alt="">
     <h2 class="title">标题</h2>
+    <h2 class="title1">标题</h2>
     <p class="content"></p>
     <p class="source"></p>
     <p class="time"></p>
@@ -50,10 +51,6 @@
     // 获取需要更新的卡片元素
     const cardElement = document.querySelector('.card');
 
-
-    https://gitee.com/api/v5/users/liyangyf
-
-    
     // 获取需要更新的卡片数据
     fetch('https://api.vika.cn/fusion/v1/datasheets/dst9mc5CYEGRRbfWxy/records?viewId=viwNzBnq8ZZwn&fieldKey=name', {
       headers: {
@@ -61,32 +58,25 @@
       }
     })
       .then(response => response.json())
-      // .then(json => {
-      //   console.log(json);
-      // })
+
       .then(data => {
-        console.log(data);
+        //需要设置变量，不可直接使用，大坑
+        var apidata = data
+        console.log(apidata.data);
         // 更新卡片的标题、内容和配图
-        // document.getElementsByClassName('.title').innerHTML =  message;
+         document.getElementsByClassName('.title1').innerHTML =  message;
         const titleElement = document.querySelector('.title');
         // 获取需要更新的字段
-      
-
-        const fieldValue = JSON.stringify(data.records[0].fields.content);
-
-        const myVariable = fieldValue;
-
-        document.write(myVariable)
-
-        console.log(myVariable)
-
-        titleElement.textContent = data.records[0].fields.content;
+        titleElement.textContent = apidata.data.records[0].fields.title;
 
         const contentElement = cardElement.querySelector('.content');
-        contentElement.textContent = data.records[0].fields.content;
+        contentElement.textContent = apidata.data.records[0].fields.content;
 
         const imageElement = cardElement.querySelector('.image');
-        imageElement.src = data.records[0].fields.image;
+        imageElement.src = apidata.data.records[0].fields.image[0].url;
+
+        console.log(apidata.data.records[0].fields.image[0].url);
+
       })
       .catch(error => console.error(error));
 

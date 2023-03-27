@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <title>Card Example</title>
+  <style>
+    .card {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 480px;
+      height: 480px;
+      border: 1px solid #ccc;
+      border-radius: 15px;
+      padding: 20px;
+      background-image: linear-gradient(0deg, #a8edea 0%, #fed6e3 100%)
+    }
+
+    .title {
+      font-size: 24px;
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+
+    .content {
+      font-size: 16px;
+      margin-bottom: 20px;
+    }
+
+    .image {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+      margin-bottom: 20px;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="card">
+    <img class="image" src="" alt="">
+    <h2 class="title">标题</h2>
+    <p class="content"></p>
+    <p class="source"></p>
+    <p class="time"></p>
+  </div>
+
+  <script>
+    var arr = {
+      "code": 200,
+      "success": true,
+      "data": {
+        "total": 3,
+        "records": [
+          {
+            "recordId": "recwCk44YnxPY",
+            "createdAt": 1679888353000,
+            "updatedAt": 1679888799000,
+            "fields": {
+              "content": "2022年全国粮食总产量达13731亿斤，比上年增加74亿斤。亮丽的成绩单背后，是一系列新科技、新农机、新农艺的应用。",
+              "id": 1,
+              "source": "新华社",
+              "title": "强科技端牢“中国饭碗”1",
+              "time": 1679888700000,
+              "image": [
+                {
+                  "id": "atclNAOyWPAK6",
+                  "name": "image.png",
+                  "size": 227456,
+                  "mimeType": "image/png",
+                  "token": "space/2023/03/27/a3bd28dae2644e04a79af573d05d2711",
+                  "width": 560,
+                  "height": 315,
+                  "url": "https://s1.vika.cn/space/2023/03/27/a3bd28dae2644e04a79af573d05d2711"
+                }
+              ]
+            }
+          },
+          {
+            "recordId": "recQ7rrDCF7y7",
+            "createdAt": 1679888353000,
+            "updatedAt": 1679888801000,
+            "fields": {
+              "content": "2022年全国粮食总产量达13731亿斤，比上年增加74亿斤。亮丽的成绩单背后，是一系列新科技、新农机、新农艺的应用。",
+              "id": 2,
+              "source": "新华社",
+              "title": "强科技端牢“中国饭碗”2",
+              "time": 1679888700000,
+              "image": [
+                {
+                  "id": "atclNAOyWPAK6",
+                  "name": "image.png",
+                  "size": 227456,
+                  "mimeType": "image/png",
+                  "token": "space/2023/03/27/a3bd28dae2644e04a79af573d05d2711",
+                  "width": 560,
+                  "height": 315,
+                  "url": "https://s1.vika.cn/space/2023/03/27/a3bd28dae2644e04a79af573d05d2711"
+                }
+              ]
+            }
+          },
+          {
+            "recordId": "recKJQnFHHZHi",
+            "createdAt": 1679888353000,
+            "updatedAt": 1679888805000,
+            "fields": {
+              "content": "2022年全国粮食总产量达13731亿斤，比上年增加74亿斤。亮丽的成绩单背后，是一系列新科技、新农机、新农艺的应用。",
+              "id": 3,
+              "source": "新华社",
+              "title": "强科技端牢“中国饭碗”3",
+              "time": 1679888700000,
+              "image": [
+                {
+                  "id": "atclNAOyWPAK6",
+                  "name": "image.png",
+                  "size": 227456,
+                  "mimeType": "image/png",
+                  "token": "space/2023/03/27/a3bd28dae2644e04a79af573d05d2711",
+                  "width": 560,
+                  "height": 315,
+                  "url": "https://s1.vika.cn/space/2023/03/27/a3bd28dae2644e04a79af573d05d2711"
+                }
+              ]
+            }
+          }
+        ],
+        "pageNum": 1,
+        "pageSize": 3
+      },
+      "message": "SUCCESS"
+    }
+    console.log(arr.data.records[2].fields.content);
+    const cardElement = document.querySelector('.card');
+    const contentElement = cardElement.querySelector('.content');
+    contentElement.textContent = arr.data.records[2].fields.content
+
+
+
+
+  </script>
+</body>
+
+</html>
