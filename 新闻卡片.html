@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <title>Card Example</title>
+  <style>
+    .card {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 480px;
+      height: 480px;
+      border: 1px solid #ccc;
+      border-radius: 15px;
+      padding: 20px;
+      background-image: linear-gradient(0deg, #a8edea 0%, #fed6e3 100%)
+    }
+
+    .title {
+      font-size: 24px;
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+
+    .content {
+      font-size: 16px;
+      margin-bottom: 20px;
+    }
+
+    .image {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+      margin-bottom: 20px;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="card">
+    <img class="image" src="" alt="">
+    <h2 class="title">标题</h2>
+    <p class="content"></p>
+    <p class="source"></p>
+    <p class="time"></p>
+  </div>
+
+  <script>
+    // 获取需要更新的卡片元素
+    const cardElement = document.querySelector('.card');
+
+
+    https://gitee.com/api/v5/users/liyangyf
+
+    
+    // 获取需要更新的卡片数据
+    fetch('https://api.vika.cn/fusion/v1/datasheets/dst9mc5CYEGRRbfWxy/records?viewId=viwNzBnq8ZZwn&fieldKey=name', {
+      headers: {
+        'Authorization': 'Bearer uskdyEpUL0mOcLBBDrU5mbE'
+      }
+    })
+      .then(response => response.json())
+      // .then(json => {
+      //   console.log(json);
+      // })
+      .then(data => {
+        console.log(data);
+        // 更新卡片的标题、内容和配图
+        // document.getElementsByClassName('.title').innerHTML =  message;
+        const titleElement = document.querySelector('.title');
+        // 获取需要更新的字段
+      
+
+        const fieldValue = JSON.stringify(data.records[0].fields.content);
+
+        const myVariable = fieldValue;
+
+        document.write(myVariable)
+
+        console.log(myVariable)
+
+        titleElement.textContent = data.records[0].fields.content;
+
+        const contentElement = cardElement.querySelector('.content');
+        contentElement.textContent = data.records[0].fields.content;
+
+        const imageElement = cardElement.querySelector('.image');
+        imageElement.src = data.records[0].fields.image;
+      })
+      .catch(error => console.error(error));
+
+      // let biaoti = document.querySelector(".title");
+      // console.log(biaoti);
+
+  </script>
+</body>
+
+</html>

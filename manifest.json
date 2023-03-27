@@ -1,17 +1,43 @@
 {
-    "lang": "en-us",
     "name": "潮汐智慧屏",
     "short_name": "潮汐智慧屏",
     "description": "潮汐智慧屏节目展示",
     "start_url": "/",
-    "background_color": "#2f3d58",
-    "theme_color": "#2f3d58",
-    "orientation": "any",
+    "scope": "/",
+    "orientation": "portrait",
+    "display_override": ["window-controls-overlay", "minimal-ui"],
     "display": "standalone",
+    "theme_color": "#f2f2f2",
+    "theme-color": "#f2f2f2",
+    "background_color": "#f2f2f2",
+    "related_applications": [],
+    "prefer_related_applications": false,
+    "categories": ["social", "news", "magazines"],
+    "display_override": ["window-controls-overlay"]
     "icons": [
-        {
-            "src": "/icon512.png",
-            "sizes": "512x512"
-        }
+      {
+        "src": "icon512.png",
+        "sizes": "512x512",
+        "type": "image/png"
+      },
+      {
+        "purpose": "maskable",
+        "src": "icon512.png",
+        "sizes": "512x512",
+        "type": "image/png"
+      }
+    ],
+    "screenshots": [
+      {
+        "src": "icon512.png",
+        "type": "image/png",
+        "sizes": "540x720"
+      },
+      {
+        "src": "icon512.png",
+        "type": "image/png",
+        "sizes": "540x720"
+      }
     ]
-}
+  }
+  

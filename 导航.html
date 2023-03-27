@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <title>Table of Records</title>
+</head>
+
+<body>
+  <script>
+    //var abc = [11,23]
+    fetch('https://api.vika.cn/fusion/v1/datasheets/dstptdAuLmu5r34Tmo/records?viewId=viw5aNmf7Jalz&fieldKey=name', {
+      headers: {'Authorization': 'Bearer uskdyEpUL0mOcLBBDrU5mbE'} })
+      .then(response => response.json())
+      .then(json => {
+        console.log(json);
+      })
+    var abc ={ json } 
+    console.log = abc
+    //Let jsonText = JSON.stringify(data);
+    //document.write( abc )
+  </script>
+</body>
+
+</html>
