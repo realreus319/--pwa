@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>My HTML Page</title>
+</head>
+
+<body>
+  <h1>API Response Table</h1>
+  <form>
+    <label for="url">API URL:</label>
+    <input type="text" id="url" name="url"
+      value="https://api.vika.cn/fusion/v1/datasheets/dstptdAuLmu5r34Tmo/records?viewId=viwDJPTtSgu3D&fieldKey=name"><br><br>
+    <label for="header">Header:</label>
+    <input type="text" id="header" name="header" value="Bearer uskdyEpUL0mOcLBBDrU5mbE"><br><br>
+    <input type="submit" value="Submit">
+  </form>
+  <table id="responseTable">
+    <thead>
+      <tr>
+        <th>Field Name</th>
+        <th>Field Value</th>
+      </tr>
+    </thead>
+    <tbody>
+    </tbody>
+  </table>
+  <script>
+    //选择 HTML 文档中的 <form> 元素，并将其赋值给变量 form。
+    const form = document.querySelector('form');
+    //选择 ID 为 responseTable 的表格的 <tbody> 元素，并将其赋值给变量 responseTable。
+    const responseTable = document.querySelector('#responseTable tbody');
+    向 form 元素添加一个事件监听器，监听 submit 事件。当事件被触发（即用户点击提交按钮）时，阻止事件的默认行为（即提交表单并重新加载页面）。
+    form.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      //这些行获取表单中 url 和 header 输入框的值，并将它们分别赋值给变量 url 和 header。
+    });
+
+    const url = document.querySelector('#url').value;
+    const header = document.querySelector('#header').value;
+
+    使用 fetch 函数向 url 变量指定的 URL 发送请求，并使用 header 变量指定的请求头。
+    Content-Type 请求头被设置为 application/json，任何其他在 header 变量中指定的请求头都会使用展开运算符 (...) 包含在内。
+    使用 await 关键字等待响应返回后再继续执行。
+    const response = await fetch(url, { headers: { 'Content-Type': 'application/json', ...JSON.parse(header) } });
+    //将响应体解析为 JSON，并将其赋值给变量 data。使用 await 关键字等待解析完成后再继续执行。
+    fetch(url, {
+      headers: {
+        'Authorization': header
+      }
+    })
+      .then(response => response.json())
+
+      .then(data => {
+
+        const dataa = data;
+        console.log(dataa.data);
+        //清空 responseTable 元素的内容。
+        responseTable.innerHTML = '';
+        // clears the contents of the responseTable element.
+        for (const key in dataa) {
+          const row = document.createElement('tr');
+          const nameCell = document.createElement('td');
+          const valueCell = document.createElement('td');
+          nameCell.textContent = key;
+          valueCell.textContent = dataa[key];
+          row.appendChild(nameCell);
+          row.appendChild(valueCell);
+          responseTable.appendChild(row);
+        }
+      });
+
+
+
+  </script>
+</body>
+
+</html>

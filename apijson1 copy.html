@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>My HTML Page</title>
+  <style>
+    table {
+        border-right: 1px solid #000000;
+        border-bottom: 1px solid #000000;
+        text-align: center;
+    }
+    
+    table th {
+        border-left: 1px solid #000000;
+        border-top: 1px solid #000000;
+    }
+    
+    table td {
+        border-left: 1px solid #000000;
+        border-top: 1px solid #000000;
+    }
+  </style>
+</head>
+
+<body>
+  <h1>API 调试工具</h1>
+  <form>
+    <label for="url">API URL:</label>
+    <input type="text" id="url" name="url"
+      value="https://api.vika.cn/fusion/v1/datasheets/dstptdAuLmu5r34Tmo/records?viewId=viwDJPTtSgu3D&fieldKey=name"><br><br>
+    <label for="header">Header:</label>
+    <input type="text" id="header" name="header" value="Bearer uskdyEpUL0mOcLBBDrU5mbE"><br><br>
+    <input type="submit" value="Submit"><br><br>
+  </form>
+  <table id="responseTable">
+    <thead>
+      <tr>
+        <th>Field Name</th>
+        <th>Field Value</th>
+      </tr>
+    </thead>
+    <tbody>
+    </tbody>
+  </table>
+  <script>
+
+    const url = "https://api.vika.cn/fusion/v1/datasheets/dstptdAuLmu5r34Tmo/records?viewId=viwDJPTtSgu3D&fieldKey=name";
+    const header = "Bearer uskdyEpUL0mOcLBBDrU5mbE";
+    ;
+    console.log(url);
+    console.log(header);
+
+    fetch(url, {
+      headers: {
+        'Authorization': header
+      }
+    })
+      .then(response => response.json())
+
+      .then(data => {
+        const apidata = data.data.records[0].fields;
+
+        for (const key in apidata) {
+          const row = document.createElement('tr');
+          const nameCell = document.createElement('td');
+          const valueCell = document.createElement('td');
+          nameCell.textContent = key;
+          valueCell.textContent = apidata[key];
+          row.appendChild(nameCell);
+          row.appendChild(valueCell);
+          responseTable.appendChild(row);
+        }
+      });
+
+  </script>
+</body>
+
+</html>
