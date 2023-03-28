@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <title>News Card</title>
+  <style>
+    .card {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 480px;
+      height: 480px;
+      border: 1px solid #ccc;
+      border-radius: 15px;
+      padding: 20px;
+      background-image: linear-gradient(0deg, #a8edea 0%, #fed6e3 100%)
+    }
+
+    .title {
+      font-size: 24px;
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+
+    .content {
+      font-size: 16px;
+      margin-bottom: 20px;
+    }
+
+    #slider-container {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+      margin-bottom: 20px;
+      border-radius: 15px;
+    }
+
+    .imagecss{
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+      margin-bottom: 20px;
+      border-radius: 15px;
+    }
+
+  </style>
+</head>
+
+<body>
+  <div class="card">
+    <div id="slider-container" > </div>
+    <h2 class="title">标题</h2>
+    <p class="content"></p>
+    <p class="source"></p>
+    <p class="time"></p>
+  </div>
+
+  <script>
+    // 获取需要更新的卡片元素
+    const cardElement = document.querySelector('.card');
+
+    // 获取需要更新的卡片数据
+    fetch('https://api.vika.cn/fusion/v1/datasheets/dst9mc5CYEGRRbfWxy/records?viewId=viwNzBnq8ZZwn&fieldKey=name', {
+      headers: {
+        'Authorization': 'Bearer uskdyEpUL0mOcLBBDrU5mbE'
+      }
+    })
+      .then(response => response.json())
+
+      .then(data => {
+        //需要设置变量，不可直接使用，大坑
+        var apidata = data
+        console.log(apidata.data);
+        
+        let swichlen = 0;
+        function NewsCardSlider() {
+          let swichlen = 0;
+          const imageElement = document.createElement("img");
+          imgcontainer.appendChild(imageElement);
+          imageElement.src = imagesrc[index].url;
+          imageElement.className = "imagecss"
+        
+        //设置轮播时间和地址
+          setInterval(() => {
+            swichlen = (swichlen + 1) % apidata.data.records.length
+
+          }, 3000);
+        }
+          console.log(swichlen);
+
+
+        // 更新卡片的标题、内容和配图
+
+        //获取html类的方案去实现
+        // var all = document.getElementsByClassName("title1");
+        // for (var i = 0; i < all.length; i++) {
+        //   all[i].innerHTML = apidata.data.records[0].fields.title
+        // }
+
+        // console.log(document.getElementsByClassName("title1").innerText);
+
+
+        // 更新标题
+        const titleElement = document.querySelector('.title');
+        titleElement.textContent = apidata.data.records[swichlen].fields.title;
+
+        //更新内容
+        const contentElement = cardElement.querySelector('.content');
+        contentElement.textContent = apidata.data.records[0].fields.content;
+
+        //图片轮播函数
+        function createImageSlider(imagesrc, imgcontainer) {
+          let index = 0;
+          const imageElement = document.createElement("img");
+          imgcontainer.appendChild(imageElement);
+          imageElement.src = imagesrc[index].url;
+          imageElement.className = "imagecss"
+        
+        //设置轮播时间和地址
+          setInterval(() => {
+            index = (index + 1) % imagesrc.length;
+            imageElement.src = imagesrc[index].url;
+          }, 3000);
+        }
+
+        //调用函数
+        const imagesrc = apidata.data.records[0].fields.image
+        console.log(imagesrc);
+        const imgcontainer = document.getElementById("slider-container");
+        console.log(document.getElementById("slider-container"));
+
+        createImageSlider(imagesrc, imgcontainer);
+
+
+        // const imageElement = cardElement.querySelector('.image');
+        // imageElement.src = apidata.data.records[0].fields.image[0].url;
+        // console.log(apidata.data.records[0].fields.image[0].url);
+
+
+
+        //更新来源
+        const sourceElement = cardElement.querySelector('.source');
+        sourceElement.textContent = apidata.data.records[0].fields.source;
+
+
+        //时间戳转换函数
+        function formatDate(timestamp) {
+          const date = new Date(timestamp);
+          const year = date.getFullYear();
+          const month = String(date.getMonth() + 1).padStart(2, "0");
+          const day = String(date.getDate()).padStart(2, "0");
+          return `${year}-${month}-${day}`;
+        }
+
+        //调用函数
+        const timestamp = apidata.data.records[0].fields.time;
+        const formattedDate = formatDate(timestamp);
+        console.log(formattedDate); // 输出：2021-09-10
+        //更新时间
+        const timeElement = cardElement.querySelector('.time');
+        timeElement.textContent = formattedDate;
+
+      })
+      .catch(error => console.error(error));
+
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <title>News Card</title>
+  <style>
+    .card {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 480px;
+      height: 480px;
+      border: 1px solid #ccc;
+      border-radius: 15px;
+      padding: 20px;
+      background-image: linear-gradient(0deg, #a8edea 0%, #fed6e3 100%)
+    }
+
+    .title {
+      font-size: 24px;
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+
+    .content {
+      font-size: 16px;
+      margin-bottom: 20px;
+    }
+
+    #slider-container {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+      margin-bottom: 20px;
+      border-radius: 15px;
+    }
+
+    .imagecss {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+      margin-bottom: 20px;
+      border-radius: 15px;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="card">
+    <img id="slider-image" src="">
+    <div class="card-body">
+      <h5 class="card-title"></h5>
+      <p class="card-text"></p>
+    </div>
+  </div>
+
+  <script>
+    let apidata;
+    let index = 0;
+
+    const titleElement = document.querySelectorAll('.card-title')[0];
+    const contentElement = document.querySelectorAll('.card-text')[0];
+    const imageElement = document.getElementById('slider-image');
+
+    function updateCard() {
+      // 设置标题和内容
+      titleElement.textContent = apidata.data.records[index].fields.title;
+      contentElement.textContent = apidata.data.records[index].fields.content;
+
+      // 设置图片
+      imageElement.src = apidata.data.records[index].fields.image[0].url;
+
+      // 增加索引并在必要时循环回开头
+      index = (index + 1) % apidata.data.records.length;
+    }
+
+    fetch('https://api.vika.cn/fusion/v1/datasheets/dst9mc5CYEGRRbfWxy/records?viewId=viwNzBnq8ZZwn&fieldKey=name', {
+      headers: {
+        'Authorization': 'Bearer uskdyEpUL0mOcLBBDrU5mbE'
+      }
+    })
+      .then(response => response.json())
+      .then(data => {
+        apidata = data;
+        console.log(apidata.data);
+        // 使用数据更新卡片元素
+        updateCard();
+        setInterval(updateCard, 5000);
+      })
+      .catch(error => console.error(error));
+
+  </script>
+</body>
+
+</html>

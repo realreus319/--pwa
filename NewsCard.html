@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <title>News Card</title>
+  <style>
+    .card {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 480px;
+      height: 480px;
+      border: 1px solid #ccc;
+      border-radius: 15px;
+      padding: 20px;
+      box-shadow: 10px 10px 5px #8f8f8f96;
+      background-image: linear-gradient(0deg, #a8edea 0%, #fed6e3 100%);
+    }
+
+    .title {
+      font-size: 24px;
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+
+    .content {
+      font-size: 16px;
+      margin-bottom: 20px;
+    }
+
+    #slider-container {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+      margin-bottom: 20px;
+      border-radius: 15px;
+    }
+
+    .imagecss {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+      margin-bottom: 20px;
+      border-radius: 15px;
+      box-shadow: 3px 3px 3px #8f8f8f96;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="card">
+    <div id="slider-container">
+      <img id="img">
+    </div>
+    <h2 class="title">标题</h2>
+    <p class="content"></p>
+    <p class="source"></p>
+    <p class="time"></p>
+  </div>
+
+  <script>
+
+    let swichlen = 0;
+    let apidata;
+
+    let setdata;
+    let cardupdatetime = 12000
+    let imgupdatetime = 4000
+
+    //获取配置信息
+    fetch('https://api.vika.cn/fusion/v1/datasheets/dstdWAAf48HtyV3W77/records?viewId=viwQQwYvnUzQa&fieldKey=name', {
+      headers: {
+        'Authorization': 'Bearer uskdyEpUL0mOcLBBDrU5mbE'
+      }
+    })
+      .then(response => response.json())
+      .then(data => {
+        setdata = data;
+        console.log(setdata.data);
+
+        cardupdatetime = setdata.data.records[0].fields.cardupdatetime * 1000
+        console.log(cardupdatetime);
+
+        imgupdatetime = setdata.data.records[0].fields.imgupdatetime * 1000
+        console.log(imgupdatetime);
+
+      })
+      .catch(error => console.error(error));
+
+
+
+
+
+    const titleElement = document.querySelector('.title');
+    const contentElement = document.querySelector('.content');
+    const imgcontainer = document.getElementById("slider-container");
+    const timeElement = document.querySelector('.time');
+    const sourceElement = document.querySelector('.source');
+
+
+
+
+    //图片轮播函数
+    function createImageSlider(imagesrc, imgcontainer) {
+      let imglen = 0;
+      const imageElement = document.getElementById("img");
+      //imgcontainer.appendChild(imageElement);
+      imageElement.src = imagesrc[imglen].url;
+      imageElement.className = "imagecss"
+
+      //设置轮播时间和地址
+      setInterval(() => {
+        imglen = (imglen + 1) % imagesrc.length;
+        imageElement.src = imagesrc[imglen].url;
+      }, imgupdatetime);
+    }
+
+    //时间戳转换函数
+    function formatDate(timestamp) {
+      const date = new Date(timestamp);
+      const year = date.getFullYear();
+      const month = String(date.getMonth() + 1).padStart(2, "0");
+      const day = String(date.getDate()).padStart(2, "0");
+      return `${year}-${month}-${day}`;
+    }
+
+
+
+    function updateCard() {
+      // 设置标题和内容
+      titleElement.textContent = apidata.data.records[swichlen].fields.title;
+      contentElement.textContent = apidata.data.records[swichlen].fields.content;
+      sourceElement.textContent = apidata.data.records[swichlen].fields.source;
+
+      //设置时间并调用函数
+      const timestamp = apidata.data.records[swichlen].fields.time;
+      const formattedDate = formatDate(timestamp);
+      timeElement.textContent = formattedDate;
+
+
+      //设置图片并引用函数
+      const imagesrc = apidata.data.records[swichlen].fields.image
+      createImageSlider(imagesrc, imgcontainer);
+
+
+
+      // 增加索引并在必要时循环回开头
+      swichlen = (swichlen + 1) % apidata.data.records.length;
+    }
+
+    //获取数据并更新
+    fetch('https://api.vika.cn/fusion/v1/datasheets/dst9mc5CYEGRRbfWxy/records?viewId=viwNzBnq8ZZwn&fieldKey=name', {
+      headers: {
+        'Authorization': 'Bearer uskdyEpUL0mOcLBBDrU5mbE'
+      }
+    })
+      .then(response => response.json())
+      .then(data => {
+        apidata = data;
+        console.log(apidata.data);
+        // 使用数据更新卡片元素，10秒更新
+        updateCard();
+        setInterval(updateCard, cardupdatetime);
+      })
+      .catch(error => console.error(error));
+
+
+
+
+
+  </script>
+</body>
+
+</html>

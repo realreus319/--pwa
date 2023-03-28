@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Image Carousel</title>
+    <style>
+      #carousel {
+        width: 500px;
+        height: 300px;
+        overflow: hidden;
+        position: relative;
+      }
+      #carousel img {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: opacity 0.5s ease-in-out;
+      }
+      #carousel button {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        background-color: transparent;
+        border: none;
+        color: white;
+        font-size: 2rem;
+        cursor: pointer;
+      }
+      #carousel button.previous {
+        left: 0;
+      }
+      #carousel button.next {
+        right: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="carousel">
+      <img id="image" src="" alt="">
+      <button class="previous" onclick="previousImage()">&#10094;</button>
+      <button class="next" onclick="nextImage()">&#10095;</button>
+    </div>
+
+    <script>
+      const images = ["https://p3.itc.cn/q_70/images03/20201103/888aea5ec34e4cf3982373e9b7babe3d.jpeg", "path/to/image2.jpg", "path/to/image3.jpg"];
+      let index = 0;
+      const imageElement = document.getElementById("image");
+
+      function showImage() {
+        imageElement.src = images[index];
+      }
+
+      function previousImage() {
+        index--;
+        if (index < 0) {
+          index = images.length - 1;
+        }
+        imageElement.style.opacity = 0;
+        setTimeout(() => {
+          showImage();
+          imageElement.style.opacity = 1;
+        }, 500);
+      }
+
+      function nextImage() {
+        index++;
+        if (index >= images.length) {
+          index = 0;
+        }
+        imageElement.style.opacity = 0;
+        setTimeout(() => {
+          showImage();
+          imageElement.style.opacity = 1;
+        }, 500);
+      }
+
+     
