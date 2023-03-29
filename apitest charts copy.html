@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+  <title>ChartCube</title>
+  <script src="https://gw.alipayobjects.com/os/lib/antv/g2plot/0.11.3/dist/g2plot.js"></script>
+</head>
+
+<body>
+  <div id="app"></div>
+  <script>
+    const datav = {
+      "code": 200,
+      "success": true,
+      "data": {
+        "total": 8,
+        "records": [
+          {
+            "recordId": "recKvb0beKRC5",
+            "createdAt": 1669791868000,
+            "updatedAt": 1669796009000,
+            "fields": {
+              "审核完成": "12",
+              "需重报": "33",
+              "包名": "C03-监测",
+              "送审中": "60"
+            }
+          },
+          {
+            "recordId": "reciQW7PHuKns",
+            "createdAt": 1669791868000,
+            "updatedAt": 1669796003000,
+            "fields": {
+              "审核完成": "14",
+              "需重报": "12",
+              "包名": "A01-安徽宏志",
+              "送审中": "45"
+            }
+          },
+          {
+            "recordId": "recH557rr3Z5a",
+            "createdAt": 1669791868000,
+            "updatedAt": 1669796001000,
+            "fields": {
+              "审核完成": "16",
+              "需重报": "12",
+              "包名": "A02-安徽地质",
+              "送审中": "12"
+            }
+          },
+          {
+            "recordId": "reczDqq51K2Ao",
+            "createdAt": 1669791868000,
+            "updatedAt": 1669791868000,
+            "fields": {
+              "审核完成": "90",
+              "需重报": "3",
+              "包名": "A03-一局发展",
+              "送审中": "81"
+            }
+          },
+          {
+            "recordId": "rece7EAvjEnq6",
+            "createdAt": 1669791868000,
+            "updatedAt": 1669791868000,
+            "fields": {
+              "审核完成": "36",
+              "需重报": "2",
+              "包名": "F18-奥加诺",
+              "送审中": "67"
+            }
+          },
+          {
+            "recordId": "recqrJ7utt20J",
+            "createdAt": 1669791868000,
+            "updatedAt": 1669792408000,
+            "fields": {
+              "审核完成": "6",
+              "需重报": "4",
+              "包名": "F21-固达利",
+              "送审中": "12"
+            }
+          },
+          {
+            "recordId": "recU2lQm53AK7",
+            "createdAt": 1669791868000,
+            "updatedAt": 1669791868000,
+            "fields": {
+              "审核完成": "23",
+              "需重报": "3",
+              "包名": "F22-鑫华夏",
+              "送审中": "34"
+            }
+          },
+          {
+            "recordId": "recQa6hw2ooF4",
+            "createdAt": 1669791868000,
+            "updatedAt": 1669791868000,
+            "fields": {
+              "审核完成": "12",
+              "需重报": "2",
+              "包名": "F17-上海野村",
+              "送审中": "12"
+            }
+          }
+        ],
+        "pageNum": 1,
+        "pageSize": 8
+      },
+      "message": "SUCCESS"
+    };
+
+
+    const firstRecord = apiResponse.data.records[0];
+    const 审核完成 = firstRecord.fields.审核完成;
+    const 送审中 = firstRecord.fields['送审中'];
+
+    console.log(审核完成); // "12"
+    console.log(送审中); // "60"
+
+
+
+    const container = document.getElementById('app');
+    const config = {
+      "title": {
+        "visible": true,
+        "text": "分组柱状图"
+      },
+      "description": {
+        "visible": true,
+        "text": "一个简单的分组柱状图"
+      },
+      "legend": {
+        "flipPage": false
+      },
+      "xAxis": {
+        "title": {
+          "visible": false
+        }
+      },
+      "yAxis": {
+        "title": {
+          "visible": false
+        }
+      },
+      "label": {
+        "visible": true
+      },
+      "forceFit": false,
+      "width": 480,
+      "height": 480,
+      "xField": "包名",
+      "yField": "送审中",
+      "groupField": "需重报",
+      "columnSize": null,
+      "color": [
+        "#5B8FF9",
+        "#5AD8A6"
+      ]
+    }
+    const plot = new g2plot.GroupColumn(container, {
+      datav,
+      ...config,
+    });
+    plot.render();
+
+  </script>
+</body>
+
+</html>

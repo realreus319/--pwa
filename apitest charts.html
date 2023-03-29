@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+  <title>ChartCube</title>
+  <script src="https://gw.alipayobjects.com/os/lib/antv/g2plot/0.11.3/dist/g2plot.js"></script>
+</head>
+
+<body>
+  <div id="app"></div>
+  <script>
+    fetch('https://api.vika.cn/fusion/v1/datasheets/dstjAW2NQcX9KtAU0y/records?viewId=viw8kW5LZsnV0&fieldKey=name', {
+      headers: {
+        'Authorization': 'Bearer uskdyEpUL0mOcLBBDrU5mbE'
+      }
+    })
+      .then(response => response.json())
+      .then(data => {
+
+        const chartData = data
+        console.log (chartData) 
+        // Parse the data into the format required by AntV
+        // const chartData = data.records.map(record => ({
+        //   包名: record.fields['包名'],
+        //   送审中: record.fields['送审中'],
+        //   需重报: record.fields['需重报']
+        // }));
+
+        // Render the chart with the parsed data
+        const container = document.getElementById('app');
+        const config = {
+          "title": {
+            "visible": true,
+            "text": "分组柱状图"
+          },
+          "description": {
+            "visible": true,
+            "text": "一个简单的分组柱状图"
+          },
+          "legend": {
+            "flipPage": false
+          },
+          "xAxis": {
+            "title": {
+              "visible": false
+            }
+          },
+          "yAxis": {
+            "title": {
+              "visible": false
+            }
+          },
+          "label": {
+            "visible": true
+          },
+          "forceFit": false,
+          "width": 480,
+          "height": 480,
+          "xField": "包名",
+          "yField": "送审中",
+          "groupField": "需重报",
+          "columnSize": null,
+          "color": [
+            "#5B8FF9",
+            "#5AD8A6"
+          ]
+        }
+        const plot = new g2plot.GroupColumn(container, {
+          datav,
+          ...config,
+        });
+        plot.render();
+      })
+      .catch(error => console.error(error));
+  </script>
+</body>
+
+</html>

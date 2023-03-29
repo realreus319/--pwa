@@ -9,8 +9,8 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      width: 480px;
-      height: 480px;
+      width: 460px;
+      height: 460px;
       border: 1px solid #ccc;
       border-radius: 15px;
       padding: 20px;
@@ -18,13 +18,24 @@
       background-image: linear-gradient(0deg, #a8edea 0%, #fed6e3 100%);
     }
 
+    .imagecss {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+      margin-bottom: 10px;
+      border-radius: 15px;
+      box-shadow: 3px 3px 3px #8f8f8f96;
+    }
+
     .title {
-      font-size: 24px;
+      font-size: 18px;
       font-weight: bold;
       margin-bottom: 10px;
     }
 
     .content {
+      width: 100%;
+      height: 200px;
       font-size: 16px;
       margin-bottom: 20px;
     }
@@ -36,15 +47,6 @@
       margin-bottom: 20px;
       border-radius: 15px;
     }
-
-    .imagecss {
-      width: 100%;
-      height: 200px;
-      object-fit: cover;
-      margin-bottom: 20px;
-      border-radius: 15px;
-      box-shadow: 3px 3px 3px #8f8f8f96;
-    }
   </style>
 </head>
 
@@ -54,19 +56,32 @@
       <img id="img">
     </div>
     <h2 class="title">标题</h2>
-    <p class="content"></p>
+    <p class="content" id="content"></p>
     <p class="source"></p>
     <p class="time"></p>
   </div>
 
   <script>
 
+    //卡片切换index的值
     let swichlen = 0;
+    //api传过来的内容和配置
     let apidata;
-
     let setdata;
+    //卡片切换默认值   图片切换默认值
     let cardupdatetime = 12000
     let imgupdatetime = 4000
+
+    //标题和内容的文本字号
+    let titlefontsize = ''
+    let contentfontsize = ''
+
+    //背景颜色
+    let backgroundcolor = ''
+    
+
+    //定义全局变量imgInterval
+    let imgInterval = null;
 
     //获取配置信息
     fetch('https://api.vika.cn/fusion/v1/datasheets/dstdWAAf48HtyV3W77/records?viewId=viwQQwYvnUzQa&fieldKey=name', {
@@ -79,17 +94,32 @@
         setdata = data;
         console.log(setdata.data);
 
-        cardupdatetime = setdata.data.records[0].fields.cardupdatetime * 1000
+        cardupdatetime = setdata.data.records[0].fields.cardupdatetime * 1000;
         console.log(cardupdatetime);
 
-        imgupdatetime = setdata.data.records[0].fields.imgupdatetime * 1000
+        imgupdatetime = setdata.data.records[0].fields.imgupdatetime * 1000;
         console.log(imgupdatetime);
+
+        titlefontsize = setdata.data.records[0].fields.titlefontsize;
+        console.log(titlefontsize);
+
+        contentfontsize = setdata.data.records[0].fields.contentfontsize;
+        console.log(contentfontsize);
+
+        backgroundcolor = setdata.data.records[0].fields.backgroundcolor[0];;
+
+        console.log(backgroundcolor);
+    
+        //设置标题内容的字号,背景颜色
+
+        document.querySelector('.title').style.fontSize = titlefontsize;
+
+        document.querySelector('.content').style.fontSize = contentfontsize;
+
+        document.querySelector('.card').style = backgroundcolor;
 
       })
       .catch(error => console.error(error));
-
-
-
 
 
     const titleElement = document.querySelector('.title');
@@ -101,20 +131,32 @@
 
 
 
+
+    // titleElement.style.fontSize = titlefontsize;
+    // document.querySelector('.content').style.fontSize = contentfontsize;
+
+
+
+
     //图片轮播函数
-    function createImageSlider(imagesrc, imgcontainer) {
+    function updateImg(imagesrc) {
       let imglen = 0;
       const imageElement = document.getElementById("img");
+      imageElement.src = "";
       //imgcontainer.appendChild(imageElement);
       imageElement.src = imagesrc[imglen].url;
       imageElement.className = "imagecss"
 
-      //设置轮播时间和地址
-      setInterval(() => {
+
+      //设置轮播时间和地址,bing保存定时器的返回值
+      imgInterval = setInterval(() => {
         imglen = (imglen + 1) % imagesrc.length;
         imageElement.src = imagesrc[imglen].url;
+        console.log(imageElement);
       }, imgupdatetime);
     }
+
+
 
     //时间戳转换函数
     function formatDate(timestamp) {
@@ -133,15 +175,19 @@
       contentElement.textContent = apidata.data.records[swichlen].fields.content;
       sourceElement.textContent = apidata.data.records[swichlen].fields.source;
 
+
       //设置时间并调用函数
       const timestamp = apidata.data.records[swichlen].fields.time;
       const formattedDate = formatDate(timestamp);
       timeElement.textContent = formattedDate;
 
+      //清除图片轮播的定时器
+      clearInterval(imgInterval);
+
 
       //设置图片并引用函数
       const imagesrc = apidata.data.records[swichlen].fields.image
-      createImageSlider(imagesrc, imgcontainer);
+      updateImg(imagesrc);
 
 
 
@@ -161,7 +207,12 @@
         console.log(apidata.data);
         // 使用数据更新卡片元素，10秒更新
         updateCard();
-        setInterval(updateCard, cardupdatetime);
+        //setInterval(updateCard, cardupdatetime);
+        setInterval(() => {
+          updateCard();
+
+        }, cardupdatetime);
+
       })
       .catch(error => console.error(error));
 
@@ -173,3 +224,4 @@
 </body>
 
 </html>
+
