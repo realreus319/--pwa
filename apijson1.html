@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>My HTML Page</title>
+  <style>
+    body {
+      background-image: linear-gradient(0deg, #cfd9df 0%, #e2ebf0 100%)
+    }
+
+    input {
+      width: 700px;
+
+    }
+
+    table {
+      border-right: 1px solid #000000;
+      border-bottom: 1px solid #000000;
+      text-align: center;
+    }
+
+    table th {
+      border-left: 1px solid #000000;
+      border-top: 1px solid #000000;
+    }
+
+    table td {
+      border-left: 1px solid #000000;
+      border-top: 1px solid #000000;
+    }
+
+    pre {
+      outline: 1px solid #ccc;
+      padding: 5px;
+      margin: 5px;
+    }
+
+    .string {
+      color: green;
+    }
+
+    .number {
+      color: darkorange;
+    }
+
+    .boolean {
+      color: blue;
+    }
+
+    .null {
+      color: magenta;
+    }
+
+    .key {
+      color: red;
+    }
+
+    ———————————————— 版权声明：本文为CSDN博主「刘星麟」的原创文章，遵循CC 4.0 BY-SA版权协议，转载请附上原文出处链接及本声明。 原文链接：https: //blog.csdn.net/liuxl57805678/article/details/125319386
+  </style>
+</head>
+
+<body>
+  <h1>API 调试工具</h1>
+  <form>
+    <label for="url">API URL:</label>
+    <input type="text" id="url" name="url"
+      value="https://api.vika.cn/fusion/v1/datasheets/dstptdAuLmu5r34Tmo/records?viewId=viwDJPTtSgu3D&fieldKey=name"><br><br>
+    <label for="header">Header:</label>
+    <input type="text" id="header" name="header" value="Bearer uskdyEpUL0mOcLBBDrU5mbE"><br><br>
+    <label for="index">index</label>
+    <input type="number" id="index" name="index" value="0"><br><br>
+    <input type="submit" value="提交"><br><br>
+  </form>
+  <table id="responseTable">
+    <thead>
+      <tr>
+        <th> 字段名字 </th>
+        <th> 字段值 </th>
+      </tr>
+    </thead>
+    <tbody>
+    </tbody>
+  </table>
+  <div id="win" class="mini-window" style="width:80%;height:80%;z-index:100;padding:0;overflow-x:hidden"
+    showMaxButton="false" allowResize="true" showModal="false">
+    <pre id="result">
+    </pre>
+  </div>
+  <script>
+    //选择 HTML 文档中的 <form> 元素，并将其赋值给变量 form。
+    const form = document.querySelector('form');
+    //选择 ID 为 responseTable 的表格的 <tbody> 元素，并将其赋值给变量 responseTable。
+    const responseTable = document.querySelector('#responseTable tbody');
+    //向 form 元素添加一个事件监听器，监听 submit 事件。当事件被触发（即用户点击提交按钮）时，
+    form.addEventListener('submit', async (event) => {
+      //阻止事件的默认行为（即提交表单并重新加载页面）。
+      event.preventDefault();
+      apiget();
+
+    });
+
+
+    function apiget() {
+
+      //这些行获取表单中 url 和 header 输入框的值，并将它们分别赋值给变量 url 和 header。
+      const url = document.querySelector('#url').value;
+      const header = document.querySelector('#header').value;
+      const index = document.querySelector('#index').value;
+      const json = document.querySelector('#result');
+      console.log(url);
+      console.log(header);
+      console.log(index);
+      console.log(json);
+      //清空 responseTable 元素的内容。
+      responseTable.innerHTML = '';
+
+      fetch(url, {
+        headers: {
+          'Authorization': header
+        }
+      })
+        .then(response => response.json())
+
+        .then(data => {
+          const apidata = data.data.records[index].fields;
+          json1 = data.data
+          //json1 = JSON.stringify(json);
+          
+          json.innerText = json1 ;
+
+          for (const key in apidata) {
+            const row = document.createElement('tr');
+            const nameCell = document.createElement('td');
+            const valueCell = document.createElement('td');
+            nameCell.textContent = key;
+            valueCell.textContent = apidata[key];
+            row.appendChild(nameCell);
+            row.appendChild(valueCell);
+            responseTable.appendChild(row);
+          }
+        });
+    }
+
+  </script>
+</body>
+
+</html>
