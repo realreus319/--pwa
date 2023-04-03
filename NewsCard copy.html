@@ -4,9 +4,8 @@
 <head>
   <meta charset="UTF-8">
   <title>News Card</title>
-  <script src="https://cdn.bootcdn.net/ajax/libs/mqtt/4.1.0/mqtt.min.js"></script>
   <style>
-    /* body, html {
+/* body, html {
     -webkit-overflow-scrolling: touch;
     background-color: var(--color-bg-1);
     font-family: -apple-system,BlinkMacSystemFont,PingFang SC,Hiragino Sans GB,HarmonyOS_Medium,Arial,Microsoft YaHei,Helvetica Neue,Helvetica,sans-serif;
@@ -15,7 +14,7 @@
     user-select: none;
     width: 100%;
 } */
-
+    
     .card {
       display: flex;
       flex-direction: column;
@@ -71,8 +70,6 @@
     <p class="source"></p>
     <p class="time"></p>
   </div>
-  <div id="messages"></div>
-  <div id="div3"></div>
 
   <script>
 
@@ -91,53 +88,49 @@
 
     //背景颜色
     let backgroundcolor = ''
-
+    
 
     //定义全局变量imgInterval
     let imgInterval = null;
 
     //获取配置信息
-    function cardSetUpdate() {
+    fetch('https://api.vika.cn/fusion/v1/datasheets/dstdWAAf48HtyV3W77/records?viewId=viwQQwYvnUzQa&fieldKey=name', {
+      headers: {
+        'Authorization': 'Bearer uskdyEpUL0mOcLBBDrU5mbE'
+      }
+    })
+      .then(response => response.json())
+      .then(data => {
+        setdata = data;
+        console.log(setdata.data);
 
-      fetch('https://api.vika.cn/fusion/v1/datasheets/dstdWAAf48HtyV3W77/records?viewId=viwQQwYvnUzQa&fieldKey=name', {
-        headers: {
-          'Authorization': 'Bearer uskdyEpUL0mOcLBBDrU5mbE'
-        }
+        cardupdatetime = setdata.data.records[0].fields.cardupdatetime * 1000;
+        console.log(cardupdatetime);
+
+        imgupdatetime = setdata.data.records[0].fields.imgupdatetime * 1000;
+        console.log(imgupdatetime);
+
+        titlefontsize = setdata.data.records[0].fields.titlefontsize;
+        console.log(titlefontsize);
+
+        contentfontsize = setdata.data.records[0].fields.contentfontsize;
+        console.log(contentfontsize);
+
+        backgroundcolor = setdata.data.records[0].fields.backgroundcolor[0];;
+
+        console.log(backgroundcolor);
+    
+        //设置标题内容的字号,背景颜色
+
+        document.querySelector('.title').style.fontSize = titlefontsize;
+
+        document.querySelector('.content').style.fontSize = contentfontsize;
+
+        document.querySelector('.card').style = backgroundcolor;
+
       })
-        .then(response => response.json())
-        .then(data => {
-          setdata = data;
-          console.log(setdata.data);
+      .catch(error => console.error(error));
 
-          cardupdatetime = setdata.data.records[0].fields.cardupdatetime * 1000;
-          console.log(cardupdatetime);
-
-          imgupdatetime = setdata.data.records[0].fields.imgupdatetime * 1000;
-          console.log(imgupdatetime);
-
-          titlefontsize = setdata.data.records[0].fields.titlefontsize;
-          console.log(titlefontsize);
-
-          contentfontsize = setdata.data.records[0].fields.contentfontsize;
-          console.log(contentfontsize);
-
-          backgroundcolor = setdata.data.records[0].fields.backgroundcolor[0];;
-
-          console.log(backgroundcolor);
-
-          //设置标题内容的字号,背景颜色
-
-          document.querySelector('.title').style.fontSize = titlefontsize;
-
-          document.querySelector('.content').style.fontSize = contentfontsize;
-
-          document.querySelector('.card').style = backgroundcolor;
-
-        })
-        .catch(error => console.error(error));
-    }
-
-    cardSetUpdate();
 
     const titleElement = document.querySelector('.title');
     const contentElement = document.querySelector('.content');
@@ -211,84 +204,38 @@
       // 增加索引并在必要时循环回开头
       swichlen = (swichlen + 1) % apidata.data.records.length;
     }
-
-
     function cardContentUpdate() {
-      //获取数据并更新
-      fetch('https://api.vika.cn/fusion/v1/datasheets/dst9mc5CYEGRRbfWxy/records?viewId=viwNzBnq8ZZwn&fieldKey=name', {
-        headers: {
-          'Authorization': 'Bearer uskdyEpUL0mOcLBBDrU5mbE'
-        }
-      })
-        .then(response => response.json())
-        .then(data => {
-          apidata = data;
-          console.log(apidata.data);
-          // 使用数据更新卡片元素，10秒更新
+    //获取数据并更新
+    fetch('https://api.vika.cn/fusion/v1/datasheets/dst9mc5CYEGRRbfWxy/records?viewId=viwNzBnq8ZZwn&fieldKey=name', {
+      headers: {
+        'Authorization': 'Bearer uskdyEpUL0mOcLBBDrU5mbE'
+      }
+    })
+      .then(response => response.json())
+      .then(data => {
+        apidata = data;
+        console.log(apidata.data);
+        // 使用数据更新卡片元素，10秒更新
+        updateCard();
+        //setInterval(updateCard, cardupdatetime);
+        setInterval(() => {
           updateCard();
-          //setInterval(updateCard, cardupdatetime);
-          setInterval(() => {
-            updateCard();
 
-          }, cardupdatetime);
+        }, cardupdatetime);
 
-        })
-        .catch(error => console.error(error));
+      })
+      .catch(error => console.error(error));
     }
 
     cardContentUpdate();
 
-    /////////////////////////////////////////////////////////////////////////////////////////////////////////
-    //mqtt 更新页面
-    // const client = mqtt.connect('wss://chaoxi.live:8084/mqtt', {
-    //   username: 'chaoxi',
-    //   password: 'ilove4dbim',
-    //   clientId: `web_${Math.random().toString(16).slice(3)}`
-    // })
 
-    // client.on('connect', function () {
-    //   console.log('connected')
-    //   client.subscribe('1/1/1/service/1')
-    // })
-
-    // client.on('message', (topic, message, packet) => {
-    //   console.log(message)
-    //   // $("#div3").text("客户端收到订阅消息,topic=" + topic + ";消息数据:" + message + ";数据包:" + packet);
-    //   document.getElementById('div3').textContent = ("客户端收到订阅消息,topic=" + topic + ";消息数据:" + message + ";数据包:" + packet)
-    // });
-
-
-
-
-    // client.on('message', function (topic, message) {
-    //   console.log(message)
-    //   const messagetojson = JSON.parse(message.toString())
-    //   console.log(messagetojson)
-
-    //   //检查cardupdate是否为true
-    //   if (messagetojson.cardupdate === "true") {
-    //     console.log('是更新消息' + messagetojson.cardupdate);
-
-    //     //更新组件
-    //     clearInterval(imgInterval);
-    //     cardSetUpdate();
-    //     cardContentUpdate();
-        
-    //     // const newupdateevent = new Event('cardupdate');
-    //     //document.dispatchEvent(event);
-    //   } else {
-    //     console.log('不是更新消息')
-    //   }
-
-    //   //显示出结果
-    //   const messageElement = document.createElement('div')
-    //   messageElement.textContent = JSON.stringify(messagetojson)
-    //   document.getElementById('messages').appendChild(messageElement)
-    // })
-  </script>
 
 
   </script>
 </body>
 
 </html>
+
+
+

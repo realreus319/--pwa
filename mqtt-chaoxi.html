@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <title>MQTT Example</title>
+  <script src="https://cdn.bootcdn.net/ajax/libs/mqtt/4.1.0/mqtt.min.js"></script>
+</head>
+
+<body>
+  <h1>MQTT Example</h1>
+
+  <div id="messages"></div>
+  <div id="div3"></div>
+  <script>
+    const client = mqtt.connect('wss://chaoxi.live:8084/mqtt', {
+      username: 'chaoxi',
+      password: 'ilove4dbim',
+      clientId: `web_${Math.random().toString(16).slice(3)}`
+    })
+
+    client.on('connect', function () {
+      console.log('connected')
+      client.subscribe('1/1/1/service/1')
+    })
+
+    client.on('message', (topic, message, packet) => {
+      console.log(message)
+      // $("#div3").text("客户端收到订阅消息,topic=" + topic + ";消息数据:" + message + ";数据包:" + packet);
+      document.getElementById('div3').textContent = ("客户端收到订阅消息,topic=" + topic + ";消息数据:" + message + ";数据包:" + packet)
+    });
+
+
+
+
+    client.on('message', function (topic, message) {
+      console.log(message)
+      const messagetojson = JSON.parse(message.toString())
+      console.log(messagetojson)  
+
+      //检查cardupdate是否为true
+      if (messagetojson.cardupdate === "true") {
+        console.log('是更新消息' + messagetojson.cardupdate)
+        const newupdateevent = new Event('cardupdate');
+        document.dispatchEvent(event);
+      }else{
+        console.log('不是更新消息')
+        }
+
+      //显示出结果
+      const messageElement = document.createElement('div')
+      messageElement.textContent = JSON.stringify(messagetojson)
+      document.getElementById('messages').appendChild(messageElement)
+    })
+  </script>
+</body>
+
+</html>
